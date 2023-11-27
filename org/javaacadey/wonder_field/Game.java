@@ -10,29 +10,28 @@ public class Game {
     private static final int GROUP_ROUND = 3;
     private static final int INDEX_FINAL_ROUND = 3;
 
-    Question question;
-    Tableau tableau;
+    private Question question;
+    private Tableau tableau;
 
-    static final Scanner scanner = new Scanner(new InputStreamReader(System.in));
+    ArrayList<Question>questions=new ArrayList<>();
 
+    public static final Scanner scanner = new Scanner(new InputStreamReader(System.in));
 
     public void init() {
         System.out.println("Запуск игры \"Поле Чудес\" - подготовка к игре. Вам нужно ввести вопросы и ответы для игры.");
-
         for (int i = 1; i < 5; i++) {
             System.out.println("Введите вопрос #" + i);
-            question.questionList.add(scanner.nextLine());
+            String quest=scanner.nextLine();
+
             System.out.println("Введите ответ вопрос #" + i);
-            question.answerList.add(scanner.nextLine());
+            String answ = scanner.nextLine();
+
+            question=new Question(quest,answ);
+            questions.add(question);
         }
         System.out.println("Иницализация закончена, игра начнется через 5 секунд");
         sleep();
         System.out.println("\n".repeat(50));
-
-//        for (int j = 0; j < 50; j++) {
-//            System.out.println("");
-//        }
-        //scanner.close();
     }
 
     public void sleep() {
@@ -41,6 +40,10 @@ public class Game {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Scanner getScanner() {
+        return scanner;
     }
 
 }

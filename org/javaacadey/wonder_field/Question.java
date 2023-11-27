@@ -3,7 +3,14 @@ package org.javaacadey.wonder_field;
 import java.util.ArrayList;
 
 public class Question {
+        private String question;
+        private String answer;
 
-        ArrayList<String> questionList=new ArrayList<>();
-        ArrayList<String>answerList=new ArrayList<>();
+    public Question(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
     }
+    public String getAnswer() {
+        return answer;
+    }
+}
