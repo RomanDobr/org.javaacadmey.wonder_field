@@ -6,18 +6,13 @@ import java.util.ArrayList;
 public class Tableau {
     private String correctAnswer;
     private ArrayList<String> lettersOnBoard = new ArrayList<>();
-    private Game game;
-    private Question question;
 
-    public void initTableau() {
-        int i = (int) Math.random() * 4;
-        question = game.questions.get(i);
+    public void initTableau(Question question) {
         correctAnswer = question.getAnswer();
         for (char ch : correctAnswer.toCharArray()) {
             lettersOnBoard.add(Character.toString(ch).toUpperCase());
         }
     }
-
     //
     //3. Табло умеет отображать в консоли все буквы в формате: " _  _ А _ _ К " .
     //"_" - для неотгаданных букв, отгаданные буквы в верхнем регистре
@@ -53,19 +48,20 @@ public class Tableau {
     public boolean isUnknownLetters(String s) {
         if (s.contains("_")){
             return true;
-        }else {
-            return false;
         }
+        return false;
     }
 
     //7. Создать метод проверку проверяющий что атрибуты не пусты. Использовать этот метод в пунктах 3,4.
     public boolean isInspector(String s) {
-        if (s.length() != 0 && !s.equals(" ")) {
-            return true;
-        } else {
+        if (s.length()==0) {
             return false;
         }
+        for (char ch : s.toCharArray()){
+            if (Character.isLetter(ch)){
+                return true;
+            }
+        }
+        return false;
     }
-
-
 }

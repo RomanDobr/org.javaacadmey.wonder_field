@@ -5,35 +5,39 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
-    private static final int COUNT_GAMER = 3;
-    private static final int COUNT_ROUND = 4;
-    private static final int GROUP_ROUND = 3;
-    private static final int INDEX_FINAL_ROUND = 3;
+    public static final int COUNT_GAMER = 3;
+    public static final int COUNT_ROUND = 4;
+    public static final int GROUP_ROUND = 3;
+    public static final int INDEX_FINAL_ROUND = 3;
 
     private Question question;
     private Tableau tableau;
 
-    ArrayList<Question>questions=new ArrayList<>();
+    private ArrayList<Question>questions=new ArrayList<>();
 
     public static final Scanner scanner = new Scanner(new InputStreamReader(System.in));
+
+    public Game() {
+        Yakubovich yakubovich = new Yakubovich();
+    }
 
     public void init() {
         System.out.println("Запуск игры \"Поле Чудес\" - подготовка к игре. Вам нужно ввести вопросы и ответы для игры.");
         for (int i = 1; i < 5; i++) {
             System.out.println("Введите вопрос #" + i);
-            String quest=scanner.nextLine();
+            String questionTmp=scanner.nextLine();
 
             System.out.println("Введите ответ вопрос #" + i);
-            String answ = scanner.nextLine();
+            String answerTmp = scanner.nextLine();
 
-            question=new Question(quest,answ);
+            question=new Question(questionTmp,answerTmp.toUpperCase());
             questions.add(question);
         }
+
         System.out.println("Иницализация закончена, игра начнется через 5 секунд");
         sleep();
         System.out.println("\n".repeat(50));
     }
-
     public void sleep() {
         try {
             Thread.sleep(5000);
@@ -41,9 +45,4 @@ public class Game {
             e.printStackTrace();
         }
     }
-
-    public static Scanner getScanner() {
-        return scanner;
-    }
-
 }
