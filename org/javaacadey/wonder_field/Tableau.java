@@ -18,7 +18,7 @@ public class Tableau {
     //"_" - для неотгаданных букв, отгаданные буквы в верхнем регистре
     //
     public void display(String s) {
-        if (!isInspector(s)){
+        if (!isInspector(s)) {
             return;
         }
         int i = lettersOnBoard.indexOf(s);
@@ -46,7 +46,7 @@ public class Tableau {
 
     //6. Табло имеет функцию "Содержит неизвестные буквы" - если есть неразгаданные буквы - вернет истину, иначе ложь.
     public boolean isUnknownLetters(String s) {
-        if (s.contains("_")){
+        if (s.contains("_")) {
             return true;
         }
         return false;

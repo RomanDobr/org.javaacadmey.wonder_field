@@ -11,7 +11,7 @@ public class Yakubovich {
     //2. Должен уметь начинать шоу: Якубович: Здравствуйте, уважаемые дамы и господа!
     // Пятница! В эфире капитал-шоу «Поле чудес»!
 
-    public void startShow(){
+    public void startShow() {
         System.out.println("Здравствуйте, уважаемые дамы и господа!");
         System.out.println("Пятница! В эфире капитал-шоу «Поле чудес»!");
     }
@@ -26,7 +26,7 @@ public class Yakubovich {
     // Имена придут в виде массива строк. Написать метод соединения строк в одну строку с запятыми.
     //Если это финальный раунд: "Якубович: приглашаю победителей групповых этапов: (имена участников) через запятую".
 
-    public void setShow(ArrayList<String>listPlayers, int roundNumber){
+    public void setShow(ArrayList<String>listPlayers, int roundNumber) {
         if (roundNumber != Game.INDEX_FINAL_ROUND){
             System.out.println("приглашаю (" + roundNumber + ") тройку игроков: ("
                     + Arrays.toString(listPlayers.toArray())+")");
@@ -36,7 +36,7 @@ public class Yakubovich {
         }
     }
     //5. Задавать вопрос раунда: "Якубович: Внимание вопрос! (текст вопроса с новой строки)"
-    public void getQuestion(String s){
+    public void getQuestion(String s) {
         System.out.println("Внимание вопрос!");
         System.out.println(s);
     }
@@ -44,10 +44,10 @@ public class Yakubovich {
     //6. Кричать, в случае победы игрока (придет имя, город, и признак "финальный раунд или нет"):
     //Если не финальный раунд: "Якубович: Молодец! (имя) из (город) проходит в финал!"
     //Если финальный раунд: "Якубович: И перед нами победитель Капитал шоу поле чудес! Это (имя) из (город)"
-    public void setWinner(String namePlayer, String cityPlayer, boolean isFinalRound){
-        if (!isFinalRound){
+    public void setWinner(String namePlayer, String cityPlayer, boolean isFinalRound) {
+        if (!isFinalRound) {
             System.out.println("Молодец! (" + namePlayer + ") из (" + cityPlayer +") проходит в финал!");
-        }else {
+        } else {
             System.out.println("И перед нами победитель Капитал шоу поле чудес! " +
                     "Это (" + namePlayer +") из (" + cityPlayer +")");
         }
@@ -59,10 +59,10 @@ public class Yakubovich {
     //На следующей строке "__________________________________"
     //
     //Проверять слово:
-    //Если переданное слово правильно: "Якубович: (слово)! Абсолютно верно!". Вызывать метод из пункта 6
+    //Если переданное слово правильно: "Якубович: (слово)! Абсолютно верно!".
     //Если переданное слово неверно: "Якубович: Неверно! Следующий игрок!"
     //На следующей строке "__________________________________"
-    public void setAnswer(Player player, String answerPlayer, String answer, Tableau tableau){
+    public void setAnswer(String answerPlayer, String answer, Tableau tableau) {
         if (answerPlayer.length() == 1) {
             if (answer.contains(answerPlayer)) {
                 int i = answer.indexOf(answerPlayer);
@@ -76,17 +76,10 @@ public class Yakubovich {
             if (answerPlayer.equals(answer)) {
                 System.out.println("(" + answerPlayer + ")! Абсолютно верно!");
                 tableau.openWord();
-                if (Game.COUNT_ROUND!=Game.INDEX_FINAL_ROUND) {
-                    setWinner(player.getName(), player.getCity(), false);
-                }else {
-                    setWinner(player.getName(), player.getCity(), true);
-                }
             } else {
                 System.out.println("Неверно! Следующий игрок!");
             }
             System.out.println("__________________________________");
         }
-
     }
-
 }

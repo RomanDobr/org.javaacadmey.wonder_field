@@ -46,12 +46,12 @@ public class Player {
     /**
      * 3. Игрок умеет говорить слово: "Игрок (имя игрока): слово (слово из консоли)"
      */
-    public String playerSayWord(){
+    public String playerSayWord() {
         String word = Game.scanner.nextLine();
         System.out.println("Игрок ("+ name + "): " + "слово ("+word+")");
         return word;
     }
-    public PlayerAnswer setStep(){
+    public PlayerAnswer setStep() {
         System.out.println("Ход игрока " + name + ", " + city);
         while (true){
             System.out.println("Если хотите букву нажмите 'б' и enter, если хотите слово нажмите 'c' и enter");
@@ -61,7 +61,7 @@ public class Player {
                 answer = playerSayLetter();
             } else if (typeAnswer.equals('с')) {
                 answer = playerSayWord();
-            }else {
+            } else {
                 System.out.println("Некорректное значение, введите 'б' или 'с'");
                 continue;
             }
