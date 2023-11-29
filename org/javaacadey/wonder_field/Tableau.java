@@ -1,39 +1,42 @@
 package org.javaacadey.wonder_field;
 
-import java.util.ArrayList;
-
-
 public class Tableau {
     private String correctAnswer;
-    private ArrayList<String> lettersOnBoard = new ArrayList<>();
+    private String[] lettersOnBoard;
 
     public void initTableau(Question question) {
         correctAnswer = question.getAnswer();
-        for (char ch : correctAnswer.toCharArray()) {
-            lettersOnBoard.add(Character.toString(ch).toUpperCase());
-        }
+        lettersOnBoard = correctAnswer.split("");
     }
+
     //
     //3. Табло умеет отображать в консоли все буквы в формате: " _  _ А _ _ К " .
     //"_" - для неотгаданных букв, отгаданные буквы в верхнем регистре
     //
     public void display(String s) {
+
         if (!isInspector(s)) {
             return;
         }
-        int i = lettersOnBoard.indexOf(s);
-        for (int index = 0; index < lettersOnBoard.size(); index++) {
-            if (index != i) {
-                System.out.print("_");
-            } else if (index == i) {
-                openLetters(i);
+        int letterCount = 0;
+        for (int i = 0; i < lettersOnBoard.length; i++) {
+            if (s.equals(lettersOnBoard[i])) {
+                letterCount = i;
             }
         }
+        for (int index = 0; index < lettersOnBoard.length; index++) {
+            if (index != letterCount) {
+                System.out.print("_");
+            } else if (index == letterCount) {
+                openLetters(letterCount);
+            }
+        }
+        System.out.println();
     }
 
     //4. Табло умеет открывает букву(ы).
     public void openLetters(int i) {
-        if (!isInspector(Integer.toString(i))){
+        if (!isInspector(Integer.toString(i))) {
             return;
         }
         System.out.print(correctAnswer.charAt(i));
@@ -54,14 +57,21 @@ public class Tableau {
 
     //7. Создать метод проверку проверяющий что атрибуты не пусты. Использовать этот метод в пунктах 3,4.
     public boolean isInspector(String s) {
-        if (s.length()==0) {
-            return false;
+        if (s.length() == 0) {
+            throw new IllegalArgumentException("Отсутствует буква");
         }
-        for (char ch : s.toCharArray()){
-            if (Character.isLetter(ch)){
-                return true;
+        return true;
+    }
+
+    //шаг 5.4Создать метод проверки табло: если табло полностью заполнено, тогда возвращать истину.
+    // По сути это означает, что игрок победил.
+    public boolean isCheckTableau() {
+        for (int i = 0; i < lettersOnBoard.length; i++) {
+            if (lettersOnBoard[i].contains("_")) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
+
 }

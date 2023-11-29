@@ -8,4 +8,12 @@ public class PlayerAnswer {
         this.typeAnswer = typeAnswer;
         this.answer = answer;
     }
+
+    public String getTypeAnswer() {
+        return typeAnswer;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
 }

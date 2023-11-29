@@ -1,9 +1,5 @@
 package org.javaacadey.wonder_field;
 
-import org.javaacadey.wonder_field.player.Player;
-import org.javaacadey.wonder_field.player.PlayerAnswer;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Yakubovich {
@@ -17,7 +13,7 @@ public class Yakubovich {
     }
 
     //3. Прощаться: Якубович: Мы прощаемся с вами ровно на одну неделю! Здоровья вам, до встречи!
-    public void endShow(){
+    public void endShow() {
         System.out.println("Мы прощаемся с вами ровно на одну неделю! Здоровья вам, до встречи!");
     }
 
@@ -26,15 +22,16 @@ public class Yakubovich {
     // Имена придут в виде массива строк. Написать метод соединения строк в одну строку с запятыми.
     //Если это финальный раунд: "Якубович: приглашаю победителей групповых этапов: (имена участников) через запятую".
 
-    public void setShow(ArrayList<String>listPlayers, int roundNumber) {
-        if (roundNumber != Game.INDEX_FINAL_ROUND){
+    public void setShow(String[]listPlayers, int roundNumber) {
+        if (roundNumber != Game.INDEX_FINAL_ROUND) {
             System.out.println("приглашаю (" + roundNumber + ") тройку игроков: ("
-                    + Arrays.toString(listPlayers.toArray())+")");
+                    + Arrays.toString(listPlayers) + ")");
         } else if (roundNumber == Game.INDEX_FINAL_ROUND) {
             System.out.println("приглашаю победителей групповых этапов: ("
-                    + Arrays.toString(listPlayers.toArray())+")");
+                    + Arrays.toString(listPlayers) + ")");
         }
     }
+
     //5. Задавать вопрос раунда: "Якубович: Внимание вопрос! (текст вопроса с новой строки)"
     public void getQuestion(String s) {
         System.out.println("Внимание вопрос!");
@@ -46,10 +43,10 @@ public class Yakubovich {
     //Если финальный раунд: "Якубович: И перед нами победитель Капитал шоу поле чудес! Это (имя) из (город)"
     public void setWinner(String namePlayer, String cityPlayer, boolean isFinalRound) {
         if (!isFinalRound) {
-            System.out.println("Молодец! (" + namePlayer + ") из (" + cityPlayer +") проходит в финал!");
+            System.out.println("Молодец! (" + namePlayer + ") из (" + cityPlayer + ") проходит в финал!");
         } else {
-            System.out.println("И перед нами победитель Капитал шоу поле чудес! " +
-                    "Это (" + namePlayer +") из (" + cityPlayer +")");
+            System.out.println("И перед нами победитель Капитал шоу поле чудес! "
+                    + "Это (" + namePlayer + ") из (" + cityPlayer + ")");
         }
     }
 
@@ -72,7 +69,7 @@ public class Yakubovich {
                 System.out.println("Нет такой буквы! Следующий игрок, крутите барабан!");
             }
             System.out.println("__________________________________");
-        } else if (answerPlayer.length()>1) {
+        } else if (answerPlayer.length() > 1) {
             if (answerPlayer.equals(answer)) {
                 System.out.println("(" + answerPlayer + ")! Абсолютно верно!");
                 tableau.openWord();

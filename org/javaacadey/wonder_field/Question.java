@@ -10,8 +10,12 @@ public class Question {
         this.question = question;
         this.answer = answer;
     }
+
     public String getAnswer() {
         return answer;
     }
 
+    public String getQuestion() {
+        return question;
+    }
 }
