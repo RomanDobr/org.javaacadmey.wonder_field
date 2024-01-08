@@ -11,25 +11,15 @@ public class Game {
     public static final int COUNT_ROUND = 4;
     public static final int GROUP_ROUND = 3;
     public static final int INDEX_FINAL_ROUND = 3;
-
     private Question question;
-    private Tableau tableau;
-
-    private String[] winners = new String[3];
-
+    private Tableau tableau = new Tableau();
+    private Player[] winners = new Player[3];
     private Player[] players = new Player[3];
-    private Yakubovich yakubovich;
-
+    private Yakubovich yakubovich = new Yakubovich();
     private ArrayList<Question> questions = new ArrayList<>();
-
     public static final Scanner scanner = new Scanner(new InputStreamReader(System.in));
 
-    public Game(Yakubovich yakubovich) {
-        this.yakubovich = yakubovich;
-    }
-
-    public void init() {
-        tableau = new Tableau();
+    private void init() {
         System.out.println("Запуск игры \"Поле Чудес\" +- подготовка к игре. Вам нужно ввести вопросы и ответы для игры.");
         for (int i = 1; i < 5; i++) {
 
@@ -47,8 +37,19 @@ public class Game {
         System.out.println("\n".repeat(50));
     }
 
-    public void sleep() {
+    public ArrayList<Question> init_test() {
+        question = new Question("Столица РТ", "Казань".toUpperCase());
+        questions.add(question);
+        question = new Question("Столица РФ", "Москва".toUpperCase());
+        questions.add(question);
+        question = new Question("Столица Белоруссии", "Минск".toUpperCase());
+        questions.add(question);
+        question = new Question("Спутник Земли", "Луна".toUpperCase());
+        questions.add(question);
+        return questions;
+    }
 
+    public void sleep() {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -56,108 +57,97 @@ public class Game {
         }
     }
 
-    //Создать метод который создает игроков
-    public Player[] setPlayer() {
+    private Player[] setPlayer() {
         for (int i = 1; i <= COUNT_GAMER; i++) {
             System.out.println("Игрок №" + i + " представьтесь: имя,город. Например: Иван,Москва");
             String text = Game.scanner.nextLine();
             String[] name = text.split(",");
-            players[i-1] = new Player(name[0], name[1]);
+            players[i - 1] = new Player(name[0], name[1]);
         }
         return players;
     }
 
-    //Создать метод который вытащит все имена игроков в массив
-    public String[] getNamePlayers(Player[] players) {
+    private String[] getNamePlayers(Player[] players) {
         String[] namePlayers = new String[3];
         for (int i = 0; i < players.length; i++) {
             namePlayers[i] = players[i].getName();
         }
         return namePlayers;
     }
-    //5. Создать метод хода игрока (на вход вопрос и игрок), на выход булево: игрок ходит до тех пор,
-    // пока он либо не выиграл (возвращается истина), либо не ошибся (возвращается ложь). Если игрок отгадал букву,
-    // то должно появится обновленное табло.
 
-    public boolean stepPlayer(Question question, Player player) {
+    private boolean stepPlayer(Question question, Player player) {
         while (true) {
             PlayerAnswer playerAnswer = player.setStep();
-            if (playerAnswer.getTypeAnswer() == "б") {
-                if (question.getAnswer().contains(player.playerSayLetter())) {
-                    int i = question.getAnswer().indexOf(player.playerSayLetter());
-                    tableau.openLetters(i);
+            if (playerAnswer.getTypeAnswer().equals("б")) {
+                String strAnswer = playerAnswer.getAnswer();
+                String strQuestion = question.getAnswer();
+                if (strQuestion.contains(strAnswer)) {
+                    yakubovich.setAnswer(playerAnswer.getAnswer(), question.getAnswer(), tableau);
+                    if (Tableau.getUncknowWord().contains(" ")) {
+                        continue;
+                    }
                     if (tableau.isCheckTableau()) {
                         return true;
                     }
                 } else {
                     return false;
                 }
-            } else if ((playerAnswer.getTypeAnswer() == "с")) {
-                if (question.getAnswer().equals(player.playerSayWord())) {
+            } else if ((playerAnswer.getTypeAnswer().equals("с"))) {
+                if (question.getAnswer().equals(playerAnswer.getAnswer())) {
                     tableau.openWord();
                     return true;
                 }
+                return false;
             }
         }
     }
-    //6. Создать метод "сыграть раунд": игроки ходят по очереди и пытаются отгадать вопрос, до победы одно из игроков.
-    // Если игрок победил в не финальном раунде, то заносится в массив победителей. Когда победитель найден, якубович кричит о победе.
 
-    public void gameRound(Player[] players, Question question) {
-        for (int i = 0; i < players.length; i++) {
-            if (stepPlayer(question, players[i])) {
-                winners[i] = players[i].getName();
-                yakubovich.setWinner(players[i].getName(), players[i].getCity(), false);
-            }
-        }
-    }
-    //7. создать метод "сыграть все групповые раунды":
-    //Играются три раунда.
-    //В каждом раунде создаются игроки.
-    //На табло добавляется ответ.
-    //Якубович приглашает игроков.
-    //Якубович спрашивает вопрос.
-    //Появляется табло.
-    //Играется групповой раунд.
-
-    public void playsAllGroupRounds() {
-        for (int i = 0; i < GROUP_ROUND; i++) {
-            tableau.initTableau(questions.get(i));
-            yakubovich.startShow();
-            tableau.display(question.getAnswer());
-            yakubovich.setShow(getNamePlayers(setPlayer()), i);
-            gameRound(players, question);
-            yakubovich.getQuestion(question.getQuestion());
-            tableau.display(question.getAnswer());
-        }
-    }
-    //8. Создать метод "сыграй финальный раунд"
-    //На табло добавляется ответ.
-    //Якубович приглашает победителей.
-    //Якубович спрашивает вопрос.
-    //Появляется табло.
-    //Играется финальный раунд.
-
-    public void playFinalRound() {
-        for (int i = 0; i < COUNT_GAMER; i++) {
-            tableau.display(question.getAnswer());
-            yakubovich.setShow(winners, INDEX_FINAL_ROUND);
-            yakubovich.getQuestion(question.getQuestion());
-            tableau.display(question.getAnswer());
-            Player[] playersWinner = new Player[3];
-            for (int index = 0; index < winners.length; index++) {
-                for (int j = 0; j < players.length; j++) {
-                    if (winners[index].equals(players[j].getName())) {
-                        playersWinner[index] = players[j];
+    private void gameRound(Player[] players, Question question) {
+        while (!tableau.isCheckTableau()) {
+            for (int i = 0; i < players.length; i++) {
+                if (stepPlayer(question, players[i])) {
+                    if (winners[0] == null) {
+                        winners[0] = yakubovich.setWinner(players[i].getName(), players[i].getCity(), false);
+                        break;
+                    } else if (winners[1] == null) {
+                        winners[1] = yakubovich.setWinner(players[i].getName(), players[i].getCity(), false);
+                        break;
+                    } else if (winners[2] == null) {
+                        winners[2] = yakubovich.setWinner(players[i].getName(), players[i].getCity(), false);
+                        break;
+                    }
+                    if (yakubovich.isFinalRound()) {
+                        yakubovich.setWinner(players[i].getName(), players[i].getCity(), true);
+                        return;
                     }
                 }
             }
-            gameRound(playersWinner, question);
         }
     }
 
-    //9. Создать метод старт:
+    private void playsAllGroupRounds() {
+        for (int i = 0; i < GROUP_ROUND; i++) {
+            Player[] players = setPlayer();
+            tableau.initTableau(questions.get(i));
+            yakubovich.setShow(players, i);
+            yakubovich.getQuestion(questions.get(i).getQuestion());
+            gameRound(players, questions.get(i));
+        }
+    }
+
+    private void playFinalRound() {
+        yakubovich.setFinalRound(true);
+        for (int i = 0; i < COUNT_GAMER; i++) {
+            yakubovich.setShow(winners, INDEX_FINAL_ROUND);
+            tableau.initTableau(questions.get(INDEX_FINAL_ROUND));
+            yakubovich.getQuestion(question.getQuestion());
+            gameRound(winners, questions.get(INDEX_FINAL_ROUND));
+            return;
+        }
+    }
+
     public void startGame() {
+        init();
         yakubovich.startShow();
         playsAllGroupRounds();
         playFinalRound();

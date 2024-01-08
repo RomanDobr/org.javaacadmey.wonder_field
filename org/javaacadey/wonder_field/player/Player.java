@@ -5,7 +5,7 @@ import org.javaacadey.wonder_field.Game;
 public class Player {
     private String name;
     private String city;
-    private final static String LETTER_RUS_ALPHABET="АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+    private final static String LETTER_RUS_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
     public Player(String name, String city) {
         this.name = name;
@@ -27,45 +27,39 @@ public class Player {
     public void setCity(String city) {
         this.city = city;
     }
-    /**
-     * 2. Игрок умеет кричать букву: Происходит ввод с консоли буквы,
-     * после чего вывод на экран "Игрок (имя игрока): буква (буква из консоли)".
-     * Должна быть только одна буква из русского алфавита.
-     * В ином случае, вывод в консоль: Ошибка! это не русская буква, введите русскую букву и снова ввод новой буквы,
-     * до тех пор пока не введет русскую букву. Действие должно возвращать букву.
-     */
+
     public String playerSayLetter() {
         while (true) {
+            System.out.print("Скажите букву: ");
             String letter = Game.scanner.nextLine();
             if (letter.length() == 1 && LETTER_RUS_ALPHABET.contains(letter)) {
                 System.out.println("Игрок (" + name + "): " + "буква (" + letter + ")");
-                return letter;
+                return letter.toUpperCase();
             }
         }
     }
-    /**
-     * 3. Игрок умеет говорить слово: "Игрок (имя игрока): слово (слово из консоли)"
-     */
-    public String playerSayWord(){
+
+    public String playerSayWord() {
+        System.out.print("Скажите слово: ");
         String word = Game.scanner.nextLine();
-        System.out.println("Игрок ("+ name + "): " + "слово ("+word+")");
-        return word;
+        System.out.println("Игрок (" + name + "): " + "слово (" + word + ")");
+        return word.toUpperCase();
     }
-    public PlayerAnswer setStep(){
-        System.out.println("Ход игрока " + name + ", " + city);
-        while (true){
+    public PlayerAnswer setStep() {
+        System.out.println("Ход игрока " + name + ", " + city );
+        while (true) {
             System.out.println("Если хотите букву нажмите 'б' и enter, если хотите слово нажмите 'c' и enter");
             String typeAnswer = Game.scanner.nextLine();
-            String answer=null;
-            if (typeAnswer.equals('б')) {
+            String answer = null;
+            if (typeAnswer.equals("б")) {
                 answer = playerSayLetter();
-            } else if (typeAnswer.equals('с')) {
+            } else if (typeAnswer.equals("с")) {
                 answer = playerSayWord();
             }else {
                 System.out.println("Некорректное значение, введите 'б' или 'с'");
                 continue;
             }
-            return new PlayerAnswer(typeAnswer,answer);
+            return new PlayerAnswer(typeAnswer, answer);
         }
     }
 }

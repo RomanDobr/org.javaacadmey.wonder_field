@@ -1,82 +1,91 @@
 package org.javaacadey.wonder_field;
 
-import java.util.Arrays;
+import org.javaacadey.wonder_field.player.Player;
 
 public class Yakubovich {
-
-    //2. Должен уметь начинать шоу: Якубович: Здравствуйте, уважаемые дамы и господа!
-    // Пятница! В эфире капитал-шоу «Поле чудес»!
+    private Player player;
+    private Player[] players;
+    private Question question;
+    private boolean isFinalRound = false;
 
     public void startShow() {
         System.out.println("Здравствуйте, уважаемые дамы и господа!");
         System.out.println("Пятница! В эфире капитал-шоу «Поле чудес»!");
     }
 
-    //3. Прощаться: Якубович: Мы прощаемся с вами ровно на одну неделю! Здоровья вам, до встречи!
     public void endShow() {
         System.out.println("Мы прощаемся с вами ровно на одну неделю! Здоровья вам, до встречи!");
     }
 
-    //4. Приглашать тройку игроков (придет список игроков и номер раунда).
-    //Если это не финальный раунд: "Якубович: приглашаю (номер тройки) тройку игроков: (имена участников через запятую)".
-    // Имена придут в виде массива строк. Написать метод соединения строк в одну строку с запятыми.
-    //Если это финальный раунд: "Якубович: приглашаю победителей групповых этапов: (имена участников) через запятую".
-
-    public void setShow(String[]listPlayers, int roundNumber) {
+    public void setShow(Player[] players, int roundNumber) {
         if (roundNumber != Game.INDEX_FINAL_ROUND) {
-            System.out.println("приглашаю (" + roundNumber + ") тройку игроков: ("
-                    + Arrays.toString(listPlayers) + ")");
+            System.out.println("приглашаю (" + (roundNumber + 1) + ") тройку игроков: ("
+                    + getNamePlayers(players) + ")");
         } else if (roundNumber == Game.INDEX_FINAL_ROUND) {
             System.out.println("приглашаю победителей групповых этапов: ("
-                    + Arrays.toString(listPlayers) + ")");
+                    + getNamePlayers(players) + ")");
         }
     }
 
-    //5. Задавать вопрос раунда: "Якубович: Внимание вопрос! (текст вопроса с новой строки)"
     public void getQuestion(String s) {
         System.out.println("Внимание вопрос!");
-        System.out.println(s);
+        System.out.println(s + "?");
     }
 
-    //6. Кричать, в случае победы игрока (придет имя, город, и признак "финальный раунд или нет"):
-    //Если не финальный раунд: "Якубович: Молодец! (имя) из (город) проходит в финал!"
-    //Если финальный раунд: "Якубович: И перед нами победитель Капитал шоу поле чудес! Это (имя) из (город)"
-    public void setWinner(String namePlayer, String cityPlayer, boolean isFinalRound) {
+    public Player setWinner(String namePlayer, String cityPlayer, boolean isFinalRound) {
         if (!isFinalRound) {
             System.out.println("Молодец! (" + namePlayer + ") из (" + cityPlayer + ") проходит в финал!");
+            return new Player(namePlayer, cityPlayer);
         } else {
             System.out.println("И перед нами победитель Капитал шоу поле чудес! "
                     + "Это (" + namePlayer + ") из (" + cityPlayer + ")");
         }
+        return new Player(namePlayer, cityPlayer);
     }
 
-    //7.Проверять ответ игрока (на вход ответ игрока, ответ, табло):
-    //Если переданная буква есть в ответе: "Якубович: Есть такая буква, откройте ее!".
-    //Если буквы нет: "Якубович: Нет такой буквы! Следующий игрок, крутите барабан!".
-    //На следующей строке "__________________________________"
-    //
-    //Проверять слово:
-    //Если переданное слово правильно: "Якубович: (слово)! Абсолютно верно!".
-    //Если переданное слово неверно: "Якубович: Неверно! Следующий игрок!"
-    //На следующей строке "__________________________________"
-    public void setAnswer(String answerPlayer, String answer, Tableau tableau) {
+    public void setAnswer(String answerPlayer, String correctAnswer, Tableau tableau) {
         if (answerPlayer.length() == 1) {
-            if (answer.contains(answerPlayer)) {
-                int i = answer.indexOf(answerPlayer);
+            if (correctAnswer.contains(answerPlayer)) {
+                int i = correctAnswer.indexOf(answerPlayer);
                 System.out.println("Есть такая буква, откройте ее!");
-                tableau.openLetters(i);
-            } else {
+                Tableau.setUncknowWord(i, answerPlayer);
+                if (i != correctAnswer.length()) {
+                    if (correctAnswer.substring(i + 1, (correctAnswer.length())).contains(answerPlayer)) {
+                        String strTmp = correctAnswer.substring((i + 1), (correctAnswer.length()));
+                        int y = strTmp.indexOf(answerPlayer) + (i + 1);
+                        Tableau.setUncknowWord(y, answerPlayer);
+                    }
+                }
+                tableau.display(answerPlayer);
+            } else if (!correctAnswer.contains(answerPlayer)) {
                 System.out.println("Нет такой буквы! Следующий игрок, крутите барабан!");
             }
             System.out.println("__________________________________");
         } else if (answerPlayer.length() > 1) {
-            if (answerPlayer.equals(answer)) {
+            if (answerPlayer.equals(correctAnswer)) {
                 System.out.println("(" + answerPlayer + ")! Абсолютно верно!");
                 tableau.openWord();
-            } else {
+            } else if (!answerPlayer.equals(correctAnswer)) {
                 System.out.println("Неверно! Следующий игрок!");
             }
             System.out.println("__________________________________");
         }
+    }
+
+    public String getNamePlayers(Player[] players) {
+        String namesPlayers = "";
+        for (Player player : players) {
+            namesPlayers += player.getName() + ",";
+        }
+        namesPlayers = namesPlayers.substring(0, namesPlayers.length() - 1);
+        return namesPlayers;
+    }
+
+    public boolean isFinalRound() {
+        return isFinalRound;
+    }
+
+    public void setFinalRound(boolean finalRound) {
+        isFinalRound = finalRound;
     }
 }

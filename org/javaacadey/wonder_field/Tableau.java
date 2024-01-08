@@ -4,37 +4,30 @@ public class Tableau {
     private String correctAnswer;
     private String[] lettersOnBoard;
 
+    private static String uncknowWord="";
+
+    private Question question;
+
     public void initTableau(Question question) {
         correctAnswer = question.getAnswer();
         lettersOnBoard = correctAnswer.split("");
+        setUncknowWords(correctAnswer);
     }
 
-    //
-    //3. Табло умеет отображать в консоли все буквы в формате: " _  _ А _ _ К " .
-    //"_" - для неотгаданных букв, отгаданные буквы в верхнем регистре
-    //
     public void display(String s) {
-
         if (!isInspector(s)) {
             return;
         }
-        int letterCount = 0;
-        for (int i = 0; i < lettersOnBoard.length; i++) {
-            if (s.equals(lettersOnBoard[i])) {
-                letterCount = i;
-            }
-        }
-        for (int index = 0; index < lettersOnBoard.length; index++) {
-            if (index != letterCount) {
+        String[] stringTmp = uncknowWord.split("");
+        for (String s1 : stringTmp) {
+            if (s1.equals(" ")) {
                 System.out.print("_");
-            } else if (index == letterCount) {
-                openLetters(letterCount);
             }
+            System.out.print(s1);
         }
         System.out.println();
     }
 
-    //4. Табло умеет открывает букву(ы).
     public void openLetters(int i) {
         if (!isInspector(Integer.toString(i))) {
             return;
@@ -42,20 +35,18 @@ public class Tableau {
         System.out.print(correctAnswer.charAt(i));
     }
 
-    //5. Табло умеет открывать слово целиком.
     public void openWord() {
+        uncknowWord = correctAnswer;
         System.out.println(correctAnswer);
     }
 
-    //6. Табло имеет функцию "Содержит неизвестные буквы" - если есть неразгаданные буквы - вернет истину, иначе ложь.
     public boolean isUnknownLetters(String s) {
-        if (s.contains("_")) {
+        if (s.contains(" ")) {
             return true;
         }
         return false;
     }
 
-    //7. Создать метод проверку проверяющий что атрибуты не пусты. Использовать этот метод в пунктах 3,4.
     public boolean isInspector(String s) {
         if (s.length() == 0) {
             throw new IllegalArgumentException("Отсутствует буква");
@@ -63,15 +54,37 @@ public class Tableau {
         return true;
     }
 
-    //шаг 5.4Создать метод проверки табло: если табло полностью заполнено, тогда возвращать истину.
-    // По сути это означает, что игрок победил.
     public boolean isCheckTableau() {
-        for (int i = 0; i < lettersOnBoard.length; i++) {
-            if (lettersOnBoard[i].contains("_")) {
+        for (int i = 0; i < uncknowWord.length(); i++) {
+            if (uncknowWord.contains(" ")) {
                 return false;
             }
         }
         return true;
     }
 
+    private void setUncknowWords(String coorectAnswer) {
+        uncknowWord = "";
+        for (int i = 0; i < coorectAnswer.length(); i++) {
+            uncknowWord += " ";
+        }
+    }
+
+    public static void setUncknowWord(int i, String letter) {
+        String[] str = null;
+        str = uncknowWord.split("");
+        str[i] = letter;
+        uncknowWord = "";
+        for (String s : str) {
+            Tableau.uncknowWord += s;
+        }
+    }
+
+    public static String getUncknowWord() {
+        return uncknowWord;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
 }
