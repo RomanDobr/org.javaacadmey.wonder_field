@@ -4,7 +4,7 @@ public class Tableau {
     private String correctAnswer;
     private String[] lettersOnBoard;
 
-    private static String uncknowWord="";
+    private static String uncknowWord = "";
 
     private Question question;
 

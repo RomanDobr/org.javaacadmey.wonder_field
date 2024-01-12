@@ -5,7 +5,7 @@ import org.javaacadey.wonder_field.Game;
 public class Player {
     private String name;
     private String city;
-    private final static String LETTER_RUS_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+    private static final  String LETTER_RUS_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
     public Player(String name, String city) {
         this.name = name;
@@ -45,8 +45,9 @@ public class Player {
         System.out.println("Игрок (" + name + "): " + "слово (" + word + ")");
         return word.toUpperCase();
     }
+
     public PlayerAnswer setStep() {
-        System.out.println("Ход игрока " + name + ", " + city );
+        System.out.println("Ход игрока " + name + ", " + city);
         while (true) {
             System.out.println("Если хотите букву нажмите 'б' и enter, если хотите слово нажмите 'c' и enter");
             String typeAnswer = Game.scanner.nextLine();
@@ -55,7 +56,7 @@ public class Player {
                 answer = playerSayLetter();
             } else if (typeAnswer.equals("с")) {
                 answer = playerSayWord();
-            }else {
+            } else {
                 System.out.println("Некорректное значение, введите 'б' или 'с'");
                 continue;
             }
